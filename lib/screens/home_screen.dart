@@ -309,6 +309,7 @@ void _addFile() {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -384,55 +385,42 @@ void _addFile() {
             ),
             SizedBox(height: 16),
             Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  childAspectRatio: 3 / 4,
-                ),
-                itemCount: filterFiles.containsKey(selectedFilter) && filterFiles[selectedFilter] != null
-                    ? filterFiles[selectedFilter]!.length + 1
-                    : 1,
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return GestureDetector(
-                      onTap: _addFile,
-                      child: AddFileCard(),
-                    );
-                  } else {
-                    final file = filterFiles[selectedFilter]![index - 1];
-                    return GestureDetector(
-                      onTap: () {
-                        final filePath = file["path"];
-                        print("Attempting to open PDF file at path: $filePath");
+  child: GridView.builder(
+    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 2,
+      mainAxisSpacing: 16,
+      crossAxisSpacing: 16,
+      childAspectRatio: 3 / 4,
+    ),
+    itemCount: filterFiles.containsKey(selectedFilter) && filterFiles[selectedFilter] != null
+        ? filterFiles[selectedFilter]!.length + 1
+        : 1,
+    itemBuilder: (context, index) {
+      if (index == 0) {
+        return GestureDetector(
+          onTap: _addFile,
+          child: AddFileCard(),
+        );
+      } else {
+        final file = filterFiles[selectedFilter]![index - 1];
+        final filePath = file["path"];
 
-                        if (file["subtitle"] == "PDF Document" && filePath != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PDFViewScreen(filePath: filePath),
-                            ),
-                          );
-                        } else if (file["subtitle"] == "Image" && filePath != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ImageViewerScreen(filePath: filePath),
-                            ),
-                          );
-                        }
-                      },
-                      onLongPress: () => _confirmDeleteFile(context, index - 1),
-                      child: FileCard(
-                        title: file["title"] ?? "Untitled",
-                        subtitle: file["subtitle"] ?? "",
-                      ),
-                    );
-                  }
-                },
-              ),
-            ),
+        if (filePath == null) {
+          // 경로가 null일 때, 오류를 출력하고 빈 경로를 넣기
+          print("파일 경로가 null입니다.");
+          return Container();  // 경로가 없으면 아무것도 표시하지 않음
+        }
+
+        return FileCard(
+          title: file["title"] ?? "Untitled",
+          subtitle: file["subtitle"] ?? "",
+          path: filePath, // path로 파일 경로 전달
+        );
+      }
+    },
+  ),
+)
+
           ],
         ),
       ),

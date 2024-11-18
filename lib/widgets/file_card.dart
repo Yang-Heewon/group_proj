@@ -15,6 +15,7 @@ class FileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        print("Attempting to open PDF file at path: '$subtitle', '$path'");
         if (subtitle == "PDF Document" && path != null) {
           // PDF 파일인 경우 PDF 뷰어로 이동
           Navigator.push(

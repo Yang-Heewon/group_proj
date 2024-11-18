@@ -16,11 +16,11 @@ class _PDFViewScreenState extends State<PDFViewScreen> {
   @override
   void initState() {
     super.initState();
-    print("PDF path in PDFViewScreen: ${widget.filePath}");
   }
 
   @override
   Widget build(BuildContext context) {
+    print("PDF path in PDFViewScreen: ${widget.filePath}");
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.filePath.startsWith("http")
