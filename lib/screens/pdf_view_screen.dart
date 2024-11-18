@@ -27,26 +27,33 @@ class _PDFViewScreenState extends State<PDFViewScreen> {
             ? "Viewing Online PDF"
             : "Viewing Local PDF"),
       ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : PDFView(
-              filePath: widget.filePath,
-              enableSwipe: true,
-              swipeHorizontal: false,
-              autoSpacing: false,
-              pageFling: false,
-              onRender: (pages) {
-                setState(() {
-                  isLoading = false;
-                });
-              },
-              onError: (error) {
-                print("Error loading PDF: $error");
-              },
-              onPageError: (page, error) {
-                print("Error on page $page: $error");
-              },
+      body: Stack(
+        children: [
+          PDFView(
+            filePath: widget.filePath,
+            enableSwipe: true,
+            swipeHorizontal: false,
+            autoSpacing: false,
+            pageFling: false,
+            onRender: (pages) {
+              print("렌더 들어감");
+              setState(() {
+                isLoading = false;
+              });
+            },
+            onError: (error) {
+              print("Error loading PDF: $error");
+            },
+            onPageError: (page, error) {
+              print("Error on page $page: $error");
+            },
+          ),
+          if (isLoading)
+            Center(
+              child: CircularProgressIndicator(),
             ),
+        ],
+      ),
     );
   }
 }
